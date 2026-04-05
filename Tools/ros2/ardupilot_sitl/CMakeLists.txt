@@ -15,7 +15,7 @@ find_package(ament_cmake_python REQUIRED)
 option(ARDUPILOT_DISABLE_NETWORKING "Disable the networking API code" OFF)
 option(ARDUPILOT_DISABLE_SCRIPTING "Disable the scripting API code" OFF)
 option(ARDUPILOT_DISABLE_WATCHDOG "Build with watchdog disabled" OFF)
-option(ARDUPILOT_ENABLE_DDS "Enable the DDS client" ON)
+option(ARDUPILOT_ENABLE_DDS "Enable the DDS client" OFF)
 option(ARDUPILOT_ENABLE_NETWORKING_TESTS "Enable the networking test code" OFF)
 option(ARDUPILOT_ENABLE_PPP "Enable PPP networking" OFF)
 set(ARDUPILOT_WAF_CONFIGURE_ARGS "" CACHE STRING "Arbitrary waf configure arguments")
@@ -53,7 +53,7 @@ add_custom_target(ardupilot_configure ALL
 )
 
 add_custom_target(ardupilot_build ALL
-  ${WAF_COMMAND} build --enable-DDS ${WAF_CONFIG} ${ARDUPILOT_WAF_BUILD_ARGS}
+  ${WAF_COMMAND} build ${WAF_ENABLE_DDS} ${WAF_CONFIG} ${ARDUPILOT_WAF_BUILD_ARGS}
   WORKING_DIRECTORY ${ARDUPILOT_ROOT}
 )
 add_dependencies(ardupilot_build ardupilot_configure)
@@ -63,13 +63,7 @@ add_dependencies(ardupilot_build ardupilot_configure)
 
 # Install executables.
 install(PROGRAMS
-  ${ARDUPILOT_ROOT}/build/sitl/bin/antennatracker
   ${ARDUPILOT_ROOT}/build/sitl/bin/arducopter
-  ${ARDUPILOT_ROOT}/build/sitl/bin/arducopter-heli
-  ${ARDUPILOT_ROOT}/build/sitl/bin/arduplane
-  ${ARDUPILOT_ROOT}/build/sitl/bin/ardurover
-  ${ARDUPILOT_ROOT}/build/sitl/bin/ardusub
-  ${ARDUPILOT_ROOT}/build/sitl/bin/blimp
   DESTINATION bin/
 )
 
